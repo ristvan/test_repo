@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
-#include "AVLTree.h"
-#include "AVLTreeNodeItem.h"
+#include "AVLTree.hh"
+#include "AVLTreeNodeItem.hh"
 
 AVLTree::AVLTreeNode::AVLTreeNode()
   {
