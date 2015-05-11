@@ -1,8 +1,11 @@
 PROGNAME=AVLTreeTest
 LIBNAMES=AVLTree
 
+GTEST_DIR=/home/ristvan/appl/gtest-1.7.0
+GTEST_INCLUDE_DIR=$(GTEST_DIR)/include
+
 #INCLUDES:=$(patsubst %,./../%/include, $(LIBNAMES))
-INCLUDES:=./../include
+INCLUDES:=./../include $(GTEST_INCLUDE_DIR)
 INCDIRS:=./include $(INCLUDES)
 SRCDIR:=./src
 SRCS:=$(wildcard $(SRCDIR)/*.cc)
@@ -17,12 +20,12 @@ LIBDIR:=../lib/$(ARCH)
 OUTDIR:=./release/$(ARCH)
 INTDIR:=./release/$(ARCH)/$(PROGNAME).dir
 CFLAGS:=-I. $(patsubst %,-I%,$(INCDIRS)) -O3
-LDFLAGS:=-L$(LIBDIR)
+LDFLAGS:=-L$(LIBDIR) -L$(GTEST_DIR)
 LIBS:=$(LIBNAMES)
 
 OBJS:=$(patsubst %.cc,$(INTDIR)/%.o,$(notdir $(SRCS)))
 
-all: all-libs all-prog
+all: run
 
 all-libs:
 	$(MAKE) -C ../
@@ -41,7 +44,10 @@ $(OBJS): $(INTDIR)/%.o: $(SRCDIR)/%.cc
 	$(GCC) -c $(CFLAGS) -o $@ $<
 
 $(OUTDIR)/$(PROGNAME): $(OBJS) $(patsubst %,$(LIBDIR)/lib%.a,$(LIBS))
-	$(GCC) $(LDFLAGS) -o $@ $^ $(patsubst %,-l%,$(LIBS))
+	$(GCC) $(LDFLAGS) -o $@ $^ $(patsubst %,-l%,$(LIBS)) -lgtest -lpthread
+
+run: all-libs all-prog
+	$(OUTDIR)/$(PROGNAME)
 
 clean:
 	rm -f $(OUTDIR)/$(PROGNAME) $(INTDIR)/*.o core

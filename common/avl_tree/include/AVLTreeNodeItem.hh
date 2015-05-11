@@ -1,6 +1,8 @@
 #ifndef __AVLTREENODEITEM_H
 #define __AVLTREENODEITEM_H
 
+#include <cstdio>
+
 class AVLTreeNodeItem
   {
 private:
