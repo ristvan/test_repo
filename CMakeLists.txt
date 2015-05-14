@@ -1,0 +1,5 @@
+cmake_minimum_required (VERSION 2.6)
+
+set (GTEST_DIR /home/eistrej/appl/gtest-1.7.0)
+
+add_subdirectory(common)
