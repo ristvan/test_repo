@@ -1,3 +1,3 @@
-include_directories(${GTEST_DIR}/include ../include)
+include_directories(../include)
 
 add_library(Common AVLTree.cc)
