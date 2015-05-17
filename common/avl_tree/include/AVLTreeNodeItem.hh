@@ -4,40 +4,40 @@
 #include <cstdio>
 
 class AVLTreeNodeItem
-  {
+{
 private:
-  int i;
+    int i;
 public:
-  AVLTreeNodeItem(int aI)
+    AVLTreeNodeItem(int aI)
     {
-    i = aI;
+        i = aI;
     }
     
-  bool operator==(const AVLTreeNodeItem& aOther)
+    bool operator==(const AVLTreeNodeItem& aOther)
     {
-      return i == aOther.i;
+        return i == aOther.i;
     }
 
-  bool operator!=(const AVLTreeNodeItem& aOther)
+    bool operator!=(const AVLTreeNodeItem& aOther)
     {
-      return i != aOther.i;
+        return i != aOther.i;
     }
 
      
-  bool operator<(const AVLTreeNodeItem& aOther)
+    bool operator<(const AVLTreeNodeItem& aOther)
     {
-      return i < aOther.i;
+        return i < aOther.i;
     }
 
-  bool operator>(const AVLTreeNodeItem& aOther)
+    bool operator>(const AVLTreeNodeItem& aOther)
     {
-      return i > aOther.i;
+        return i > aOther.i;
     }
   
-  void Printf()
+    void Printf()
     {
-    printf("%d,",i); fflush(stdout);
+        printf("%d,",i); fflush(stdout);
     }
-  };
+};
 
 #endif //__AVLTREENODEITEM_H

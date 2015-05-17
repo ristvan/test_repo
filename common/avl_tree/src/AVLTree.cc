@@ -367,7 +367,7 @@ void AVLTree::Corrector(AVLTreeNode *aNode, bool right, TTypeOfModification aMod
                 {                                         /*        b   c         a     b     */
                     aNode->iRight->iDad = aNode;          /*                                  */
                 }                                         /*                                  */
-                if (aNode == dad->iLeft)                  /**i*********************************/
+                if (aNode == dad->iLeft)                  /************************************/
                 {
                     dad->iLeft = q;
                 }
@@ -397,17 +397,27 @@ void AVLTree::Corrector(AVLTreeNode *aNode, bool right, TTypeOfModification aMod
                 aNode->iDad = r;                          /*         / \              / \   / \     */
                 q->iDad = r;                              /*        R   d            a   b c   d    */
                 if (aNode->iRight != NULL)                /*       / \                              */
-                    aNode->iRight->iDad = aNode;            /*      b   c                             */
-                if (q->iLeft != NULL)                     /******************************************/
+                {                                         /*      b   c                             */
+                    aNode->iRight->iDad = aNode;          /*                                        */
+                }                                         /******************************************/
+                if (q->iLeft != NULL)
+                {
                     q->iLeft->iDad = q;
+                }
                 r->iBalance = 0;
                 if (aNode == dad->iLeft)
+                {
                     dad->iLeft = aNode;
+                }
                 else
+                {
                     dad->iRight = aNode;
+                }
                 aNode = r;
                 if (aMod == AddNewItem)
+                {
                     break;
+                }
             }
         }
         else // if (aNode->iBalance == 2)
@@ -424,10 +434,14 @@ void AVLTree::Corrector(AVLTreeNode *aNode, bool right, TTypeOfModification aMod
                     q->iDad = aNode->iDad;                  /*     aNode             Q         */
                     aNode->iDad = q;                        /*     /   \            / \        */
                     if(aNode->iLeft != NULL)                /*    Q     c          a aNode     */
-                        aNode->iLeft->iDad = aNode;           /*   / \                  / \      */
-                    if(aNode == dad->iLeft)                 /*  a   b                b   c     */
-                        dad->iLeft = q;                       /*                                 */
-                    else                                    /***********************************/
+                    {                                       /*   / \                  / \      */
+                        aNode->iLeft->iDad = aNode;         /*  a   b                b   c     */
+                    }                                       /*                                 */
+                    if(aNode == dad->iLeft)                 /***********************************/
+                    {
+                        dad->iLeft = q;
+                    }
+                    else
                     {
                         dad->iRight = q;
                     }
@@ -444,7 +458,7 @@ void AVLTree::Corrector(AVLTreeNode *aNode, bool right, TTypeOfModification aMod
                     aNode->iBalance = DNewQ[r->iBalance+1];
                     q->iBalance = DNewP[r->iBalance+1];
                     aNode->iRelativePos -= q->iRelativePos + r->iRelativePos;
-                    r->iRelativePos += q->iRelativePos; 
+                    r->iRelativePos += q->iRelativePos;     /************************************/
                     aNode->iLeft = r->iRight;               /* Double Right Rotation            */
                     q->iRight = r->iLeft;                   /*                                  */
                     r->iLeft = q;                           /*       aNode           R          */
