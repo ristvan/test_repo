@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.6)
 
-set (GTEST_DIR /home/ristvan/appl/gtest-1.7.0)
+message( ${HOME} )
+set (GTEST_LIB_DIR ${HOME}/apps/lib)
+set (GTEST_INCLUDE_DIR ${HOME}/apps/include)
 
 add_subdirectory(common)
 add_subdirectory(TerraMystica)
