@@ -1,4 +1,5 @@
 #include "CultsBoard.hh"
+#include "Factions.hh"
 #include "gtest/gtest.h"
 #include <iostream>
 
@@ -11,65 +12,129 @@ protected:
     virtual void TearDown() { }
 };
 
-TEST_F(CultsBoardTest, test_increasing_value_by_2_on_one_track)
+TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFire, 2));
-    ASSERT_EQ(2, cultsBoard.getCultValue(eFire));
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
 }
 
-TEST_F(CultsBoardTest, test_increasing_value_by_1_on_one_track)
+TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFire, 1));
-    ASSERT_EQ(1, cultsBoard.getCultValue(eFire));
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eFire));
 }
 
-TEST_F(CultsBoardTest, test_increasing_value_by_3_on_one_track)
+TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_3_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_EQ(3, cultsBoard.increaseCultValue(eFire, 3));
-    ASSERT_EQ(3, cultsBoard.getCultValue(eFire));
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eFakirs, eFire, 3));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
 }
 
-TEST_F(CultsBoardTest, test_increasing_value_by_1_then_2_on_one_track)
+TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_then_2_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFire, 1));
-    ASSERT_EQ(1, cultsBoard.getCultValue(eFire));
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eFire));
 
-    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFire, 2));
-    ASSERT_EQ(3, cultsBoard.getCultValue(eFire));
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
 }
 
-TEST_F(CultsBoardTest, test_increasing_value_by_2_then_1_on_one_track)
+TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFire, 2));
-    ASSERT_EQ(2, cultsBoard.getCultValue(eFire));
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
 
-    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFire, 1));
-    ASSERT_EQ(3, cultsBoard.getCultValue(eFire));
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
 }
 
-TEST_F(CultsBoardTest, test_increasing_value_by_2_then_1_on_two_tracks)
+TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_two_tracks)
 {
     CultsBoard cultsBoard;
-    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFire, 2));
-    ASSERT_EQ(2, cultsBoard.getCultValue(eFire));
-    ASSERT_EQ(0, cultsBoard.getCultValue(eWater));
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eFakirs, eWater));
 
-    ASSERT_EQ(1, cultsBoard.increaseCultValue(eWater, 1));
-    ASSERT_EQ(1, cultsBoard.getCultValue(eWater));
-    ASSERT_EQ(2, cultsBoard.getCultValue(eFire));
-    
-    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFire, 1));
-    ASSERT_EQ(3, cultsBoard.getCultValue(eFire));
-    ASSERT_EQ(1, cultsBoard.getCultValue(eWater));
-    
-    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWater, 2));
-    ASSERT_EQ(3, cultsBoard.getCultValue(eFire));
-    ASSERT_EQ(3, cultsBoard.getCultValue(eWater));
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eWater, 1));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eWater));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eWater, 2));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eWater));
+}
+
+TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_on_one_track)
+{
+    CultsBoard cultsBoard;
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eFire));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
+}
+
+TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_then_1_on_two_tracks)
+{
+    CultsBoard cultsBoard;
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eWater, 1));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 1));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 1));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eWater, 2));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(1, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 2));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eWater));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eWater));
 }
 
 int main(int argc, char* argv[])
