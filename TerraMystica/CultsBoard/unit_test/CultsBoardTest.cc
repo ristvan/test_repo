@@ -137,6 +137,26 @@ TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_then_1_on_two_t
     ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eWater));
 }
 
+TEST_F(CultsBoardTest, test_increasing_value_for_3_factions_by_2_on_one_track)
+{
+    CultsBoard cultsBoard;
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eWitches, eFire));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eWitches, eFire));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eFire, 2));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eWitches, eFire));
+}
+
+
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
