@@ -2,11 +2,6 @@
 
 CultsBoard::CultsBoard()
 {
-    for (int cult = eFire; cult <= eAir; ++cult)
-        for(int index = 0; index < 5; ++index)
-        {
-            values[cult][index] = 0;
-        }
 }
 
 CultsBoard::~CultsBoard()
@@ -15,11 +10,10 @@ CultsBoard::~CultsBoard()
 
 unsigned int CultsBoard::increaseCultValue(const Factions faction, const Cults cult, unsigned int value)
 {
-    values[cult][faction] += value;
-    return value;
+    return values[cult].increaseCultValue(faction, value);
 }
 
 unsigned int CultsBoard::getCultValue(const Factions faction, const Cults cult)
 {
-    return values[cult][faction];
+    return values[cult].getCultValue(faction);
 }
