@@ -1,6 +1,7 @@
 #include "CultsBoard.hh"
 #include "Factions.hh"
 #include "gtest/gtest.h"
+#include "MockIPowerUser.hh"
 #include <iostream>
 
 using namespace std;
@@ -10,12 +11,18 @@ class CultsBoardTest : public ::testing::Test
 protected:
     virtual void SetUp() { }
     virtual void TearDown() { }
+protected:
+   MockIPowerUser mockPowerUser;
 };
 
 TEST_F(CultsBoardTest, test_add_faction)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, 0, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eEarth));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eAir));
 }
 
 TEST_F(CultsBoardTest, test_increasing_value_before_adding_faction_is_not_possible)
@@ -34,6 +41,13 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_on_one_track)
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
+}
+
+TEST_F(CultsBoardTest, test_increasing_value_by_2_on_one_track_for_ChaosMagicians)
+{
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
 }
 
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_on_one_track)
@@ -195,6 +209,6 @@ TEST_F(CultsBoardTest, test_increasing_value_for_3_factions_by_2_on_one_track)
 
 int main(int argc, char* argv[])
 {
-    ::testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleMock(&argc, argv);
     return RUN_ALL_TESTS();
 }
