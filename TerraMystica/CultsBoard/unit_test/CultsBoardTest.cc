@@ -47,7 +47,21 @@ TEST_F(CultsBoardTest, test_increasing_value_by_2_on_one_track_for_ChaosMagician
 {
     CultsBoard cultsBoard;
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 3));
+    ASSERT_EQ(5, cultsBoard.getCultValue(eChaosMagicians, eFire));
+
     EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 2));
+    ASSERT_EQ(7, cultsBoard.getCultValue(eChaosMagicians, eFire));
+
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 2));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eChaosMagicians, eFire));
+
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 1));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eChaosMagicians, eFire));
 }
 
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_on_one_track)

@@ -1,4 +1,7 @@
 #include "CultsLane.hh"
+#include "IPowerUser.hh"
+
+const unsigned int powerGainOnTrack[11] = {0,0,0,1,1,3,3,5,5,5,8};
 
 CultsLane::CultsLane()
 {
@@ -25,7 +28,13 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
     unsigned int modificationValue = 0;
     if (cultsValue.find(faction) != cultsValue.end())
     {
+        int previousValue = cultsValue[faction];
         cultsValue[faction] += modificationValue = value;
+        const unsigned int realPowerGain = powerGainOnTrack[cultsValue[faction]] - powerGainOnTrack[previousValue];
+        if (realPowerGain > 0 && powerUsers[faction])
+        {
+            powerUsers[faction]->addPower(realPowerGain);
+        }
     }
     return modificationValue;
 }
