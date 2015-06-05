@@ -3,8 +3,25 @@
 
 const unsigned int powerGainOnTrack[11] = {0,0,0,1,1,3,3,5,5,5,8};
 
-CultsLane::CultsLane()
+class CultsLane::FactionData
 {
+public:
+    FactionData(IPowerUser *powerUser, unsigned int cultsValue);
+    IPowerUser *powerUser;
+    unsigned int cultsValue;
+};
+
+CultsLane::FactionData::FactionData(IPowerUser *powerUser, unsigned int cultsValue)
+    : powerUser(powerUser), cultsValue(cultsValue)
+{
+}
+
+CultsLane::~CultsLane()
+{
+    for (auto localFactionData : factionData)
+    {
+        delete localFactionData.second;
+    }
 }
 
 bool CultsLane::addFaction(const Factions faction,
@@ -12,11 +29,10 @@ bool CultsLane::addFaction(const Factions faction,
                            const unsigned int cultValue)
 {
     bool successfulnessOfAddingFaction = false;
-    bool canFactionBeAdded = cultsValue.find(faction) == cultsValue.end();
+    bool canFactionBeAdded = factionData.find(faction) == factionData.end();
     if (canFactionBeAdded)
     {
-        cultsValue[faction] = cultValue;
-        powerUsers[faction] = powerUser;
+        factionData.insert(std::make_pair(faction, new FactionData(powerUser, cultValue))); 
         successfulnessOfAddingFaction = true;
     }
     return successfulnessOfAddingFaction;
@@ -26,14 +42,19 @@ bool CultsLane::addFaction(const Factions faction,
 unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned int value)
 {
     unsigned int modificationValue = 0;
-    if (cultsValue.find(faction) != cultsValue.end())
+    if (factionData.find(faction) != factionData.end())
     {
-        int previousValue = cultsValue[faction];
-        cultsValue[faction] += modificationValue = value;
-        const unsigned int realPowerGain = powerGainOnTrack[cultsValue[faction]] - powerGainOnTrack[previousValue];
-        if (realPowerGain > 0 && powerUsers[faction])
+        FactionData *localFactionData = factionData[faction];
+        modificationValue = value;
+
+        const unsigned int previousValue = localFactionData->cultsValue;
+        const unsigned int newValue = previousValue + modificationValue;
+        const unsigned int realPowerGain = powerGainOnTrack[newValue] - powerGainOnTrack[previousValue];
+
+        localFactionData->cultsValue = newValue;
+        if (realPowerGain > 0 && localFactionData->powerUser)
         {
-            powerUsers[faction]->addPower(realPowerGain);
+            localFactionData->powerUser->addPower(realPowerGain);
         }
     }
     return modificationValue;
@@ -42,9 +63,9 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
 unsigned int CultsLane::getCultValue(const Factions faction) const
 {
     unsigned int cultValue = 0;
-    if (cultsValue.find(faction) != cultsValue.end())
+    if (factionData.find(faction) != factionData.end())
     {
-        cultValue = cultsValue.at(faction);
+        cultValue = factionData.at(faction)->cultsValue;
     }
     return cultValue;
 }
