@@ -25,6 +25,36 @@ TEST_F(CultsBoardTest, test_add_faction)
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eAir));
 }
 
+TEST_F(CultsBoardTest, test_try_to_add_the_same_faction_twice)
+{
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eEarth));
+    ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eAir));
+
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 3));
+    EXPECT_CALL(mockPowerUser, addPower(1)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 3));
+    EXPECT_CALL(mockPowerUser, addPower(1)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eEarth, 3));
+    EXPECT_CALL(mockPowerUser, addPower(1)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eAir, 3));
+
+    ASSERT_EQ(5, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eWater));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eEarth));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eAir));
+
+    ASSERT_FALSE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    ASSERT_EQ(5, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eWater));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eEarth));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eAir));
+}
+
 TEST_F(CultsBoardTest, test_increasing_value_before_adding_faction_is_not_possible)
 {
     CultsBoard cultsBoard;
