@@ -3,3 +3,5 @@ link_directories(${GTEST_LIB_DIR})
 
 add_executable(CultsBoardTest CultsBoardTest.cc)
 target_link_libraries(CultsBoardTest CultsBoard gmock pthread)
+
+add_test(NAME cults_board_unit_test COMMAND CultsBoardTest)
