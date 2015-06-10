@@ -5,6 +5,7 @@
 #include <iostream>
 
 using namespace std;
+using ::testing::Return;
 
 class CultsBoardTest : public ::testing::Test
 {
@@ -90,6 +91,7 @@ TEST_F(CultsBoardTest, test_increasing_value_by_2_on_one_track_for_ChaosMagician
     ASSERT_EQ(9, cultsBoard.getCultValue(eChaosMagicians, eFire));
 
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(1));
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 1));
     ASSERT_EQ(10, cultsBoard.getCultValue(eChaosMagicians, eFire));
 }
@@ -250,6 +252,58 @@ TEST_F(CultsBoardTest, test_increasing_value_for_3_factions_by_2_on_one_track)
     ASSERT_EQ(2, cultsBoard.getCultValue(eWitches, eFire));
 }
 
+TEST_F(CultsBoardTest, test_dont_let_step_to_level_10_because_no_keys_has_the_faction)
+{
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+
+    // Step to value 5
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eWitches, eAir, 3));
+    ASSERT_EQ(5, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 7
+    EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(7, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 9
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Try to step to value 10 but no success with it.
+    const unsigned int NO_KEYS = 0;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(NO_KEYS));
+    ASSERT_EQ(0, cultsBoard.increaseCultValue(eWitches, eAir, 1));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
+}
+
+TEST_F(CultsBoardTest, test_try_to_step_over_level_10_but_let_only_level_10_there_is_a_key)
+{
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+
+    // Step to value 5
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eWitches, eAir, 3));
+    ASSERT_EQ(5, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 7
+    EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(7, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 9
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Try to step to value 10 but no success with it.
+    const unsigned int ONE_KEYS = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
+}
 
 int main(int argc, char* argv[])
 {

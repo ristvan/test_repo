@@ -1,7 +1,7 @@
 #include "CultsLane.hh"
 #include "IPowerUser.hh"
-
-const unsigned int powerGainOnTrack[11] = {0,0,0,1,1,3,3,5,5,5,8};
+                                         /* 0  1  2  3  4  5  6  7  8  9 10 */
+const unsigned int powerGainOnTrack[11] = { 0, 0, 0, 1, 1, 3, 3, 5, 5, 5, 8 };
 
 class CultsLane::FactionData
 {
@@ -48,7 +48,19 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
         modificationValue = value;
 
         const unsigned int previousValue = localFactionData->cultsValue;
-        const unsigned int newValue = previousValue + modificationValue;
+        unsigned int newValue = previousValue + modificationValue;
+        if (newValue > 9)
+        {
+            if (localFactionData->powerUser && localFactionData->powerUser->getNumberOfKeys() > 0)
+            {
+                newValue = 10;
+            }
+            else
+            {
+                newValue = 9;
+            }
+        }
+        modificationValue = newValue - previousValue;
         const unsigned int realPowerGain = powerGainOnTrack[newValue] - powerGainOnTrack[previousValue];
 
         localFactionData->cultsValue = newValue;
