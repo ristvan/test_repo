@@ -297,12 +297,59 @@ TEST_F(CultsBoardTest, test_try_to_step_over_level_10_but_let_only_level_10_ther
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
 
-    // Try to step to value 10 but no success with it.
+    // Try to step to value 10 and it will succeed.
     const unsigned int ONE_KEYS = 1;
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eWitches, eAir, 2));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
+}
+
+TEST_F(CultsBoardTest, test_one_key_and_tries_to_step_lvl_10_on_more_cults)
+{
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+
+    // Step to value 5 on Air
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eWitches, eAir, 3));
+    ASSERT_EQ(5, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 7 on Air
+    EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(7, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 9 on Air
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Try to step to value 10 and it will succeed.
+    const unsigned int ONE_KEYS = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to level 3 on Water cult.
+    EXPECT_CALL(mockPowerUser, addPower(1)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eWitches, eWater, 3));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eWitches, eWater));
+
+    // Step to level 5 on Water cult.
+    EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eWater, 2));
+    ASSERT_EQ(5, cultsBoard.getCultValue(eWitches, eWater));
+
+    // Step to level 7 on Water cult.
+    EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eWater, 2));
+    ASSERT_EQ(7, cultsBoard.getCultValue(eWitches, eWater));
+
+    // Tries step to level 10 on Water cult, won't succeed.
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eWater, 3));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eWater));
 }
 
 int main(int argc, char* argv[])
