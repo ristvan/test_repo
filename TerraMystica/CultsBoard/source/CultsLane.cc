@@ -7,8 +7,11 @@ class CultsLane::FactionData
 {
 public:
     FactionData(IPowerUser *powerUser, unsigned int cultsValue);
-    IPowerUser *powerUser;
+    unsigned int getNumberOfKeys() const;
+    void addPower(const unsigned int power);
     unsigned int cultsValue;
+private:
+    IPowerUser *powerUser;
 };
 
 CultsLane::FactionData::FactionData(IPowerUser *powerUser, unsigned int cultsValue)
@@ -16,6 +19,25 @@ CultsLane::FactionData::FactionData(IPowerUser *powerUser, unsigned int cultsVal
 {
 }
 
+unsigned int CultsLane::FactionData::getNumberOfKeys() const
+{
+   unsigned int numberOfKeys = 0;
+   if (powerUser)
+   {
+       numberOfKeys = powerUser->getNumberOfKeys();
+   }
+   return numberOfKeys;
+}
+
+void CultsLane::FactionData::addPower(const unsigned int power)
+{
+   if (power > 0 && powerUser)
+   {
+       powerUser->addPower(power);
+   }
+}
+
+// CultsLane implementation
 CultsLane::~CultsLane()
 {
     for (auto localFactionData : factionData)
@@ -51,7 +73,7 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
         unsigned int newValue = previousValue + modificationValue;
         if (newValue > 9)
         {
-            if (localFactionData->powerUser && localFactionData->powerUser->getNumberOfKeys() > 0)
+            if (localFactionData->getNumberOfKeys() > 0)
             {
                 newValue = 10;
             }
@@ -64,10 +86,7 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
         const unsigned int realPowerGain = powerGainOnTrack[newValue] - powerGainOnTrack[previousValue];
 
         localFactionData->cultsValue = newValue;
-        if (realPowerGain > 0 && localFactionData->powerUser)
-        {
-            localFactionData->powerUser->addPower(realPowerGain);
-        }
+        localFactionData->addPower(realPowerGain);
     }
     return modificationValue;
 }
