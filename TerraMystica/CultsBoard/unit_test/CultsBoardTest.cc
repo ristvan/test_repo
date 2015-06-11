@@ -351,9 +351,3 @@ TEST_F(CultsBoardTest, DISABLED_test_one_key_and_tries_to_step_lvl_10_on_more_cu
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eWater, 3));
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eWater));
 }
-
-int main(int argc, char* argv[])
-{
-    ::testing::InitGoogleMock(&argc, argv);
-    return RUN_ALL_TESTS();
-}
