@@ -38,6 +38,10 @@ void CultsLane::FactionData::addPower(const unsigned int power)
 }
 
 // CultsLane implementation
+CultsLane::CultsLane() : lastSpaceOfTrack(eNumberOfFactions)
+{
+}
+
 CultsLane::~CultsLane()
 {
     for (auto localFactionData : factionData)
@@ -73,9 +77,11 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
         unsigned int newValue = previousValue + modificationValue;
         if (newValue > 9)
         {
-            if (localFactionData->getNumberOfKeys() > 0)
+            // do no let in when already occupied or there is no enough keys.
+            if (lastSpaceOfTrack == eNumberOfFactions && localFactionData->getNumberOfKeys() > 0)
             {
                 newValue = 10;
+                lastSpaceOfTrack = faction;
             }
             else
             {

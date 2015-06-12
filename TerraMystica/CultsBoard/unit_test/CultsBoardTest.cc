@@ -19,6 +19,8 @@ protected:
 TEST_F(CultsBoardTest, test_add_faction)
 {
     CultsBoard cultsBoard;
+    EXPECT_CALL(mockPowerUser, addPower(::testing::_)).Times(0);
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(0);
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
     ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
@@ -350,4 +352,53 @@ TEST_F(CultsBoardTest, DISABLED_test_one_key_and_tries_to_step_lvl_10_on_more_cu
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eWater, 3));
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eWater));
+}
+
+TEST_F(CultsBoardTest, test_two_faction_can_not_move_to_lvl10_on_the_same_cult)
+{
+    MockIPowerUser cmMockPowerUser;
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
+
+    // Step to value 5 on Air with Witches
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eWitches, eAir, 3));
+    ASSERT_EQ(5, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 3 on Air with Chaos Magicians
+    EXPECT_CALL(cmMockPowerUser, addPower(1)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eAir, 3));
+    ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eAir));
+
+    // Step to value 7 on Air with Witches
+    EXPECT_CALL(mockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(7, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 6 on Air with Chaos Magicians
+    EXPECT_CALL(cmMockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eAir, 3));
+    ASSERT_EQ(6, cultsBoard.getCultValue(eChaosMagicians, eAir));
+
+    // Step to value 9 on Air with Witches
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Step to value 8 on Air with Chaos Magicians
+    EXPECT_CALL(cmMockPowerUser, addPower(2)).Times(1);
+    ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eAir, 2));
+    ASSERT_EQ(8, cultsBoard.getCultValue(eChaosMagicians, eAir));
+
+    // Try to step to value 10 with Witches and it will succeed.
+    const unsigned int ONE_KEYS = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eWitches, eAir, 2));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
+
+    // Try to step to value 10 with Chaos Magicians and it will NOT succeed.
+    EXPECT_CALL(cmMockPowerUser, getNumberOfKeys()).Times(0);
+    ASSERT_EQ(1, cultsBoard.increaseCultValue(eChaosMagicians, eAir, 2));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eChaosMagicians, eAir));
 }

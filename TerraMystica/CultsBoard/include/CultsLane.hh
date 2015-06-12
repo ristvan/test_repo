@@ -9,6 +9,7 @@ class IPowerUser;
 class CultsLane
 {
 public:
+    CultsLane();
     ~CultsLane();
     bool addFaction(const Factions faction,
                     IPowerUser *powerUser,
@@ -18,4 +19,5 @@ public:
 private:
     class FactionData;
     std::map<Factions, FactionData*> factionData;
+    Factions lastSpaceOfTrack;
 };

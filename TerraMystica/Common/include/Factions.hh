@@ -15,5 +15,6 @@ enum Factions
     eAlchemists,
     eDarklings,
     eAuren,
-    eWitches
+    eWitches,
+    eNumberOfFactions
 };
