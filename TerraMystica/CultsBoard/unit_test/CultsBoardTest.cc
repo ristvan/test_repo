@@ -438,3 +438,18 @@ TEST_F(CultsBoardTest, test_increasing_cult_value_when_current_cult_value_alread
     ASSERT_EQ(0, cultsBoard.increaseCultValue(eWitches, eFire, 42));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eFire));
 }
+
+TEST_F(CultsBoardTest, test_initialized_to_9_10_and_greater_than_10_it_should_be_max_10)
+{
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 9, 10, 28, 42));
+
+    const unsigned int TWO_KEYS = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(3).WillOnce(Return(TWO_KEYS));
+    EXPECT_CALL(mockPowerUser, addPower(::testing::_)).Times(0);
+
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eFire));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eWater));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eEarth));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
+}
