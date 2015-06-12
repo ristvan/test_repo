@@ -1,5 +1,7 @@
 #include "CultsLane.hh"
 #include "IPowerUser.hh"
+#include "KeyCounter.hh"
+
                                          /* 0  1  2  3  4  5  6  7  8  9 10 */
 const unsigned int powerGainOnTrack[11] = { 0, 0, 0, 1, 1, 3, 3, 5, 5, 5, 8 };
 
@@ -38,7 +40,7 @@ void CultsLane::FactionData::addPower(const unsigned int power)
 }
 
 // CultsLane implementation
-CultsLane::CultsLane() : lastSpaceOfTrack(eNumberOfFactions)
+CultsLane::CultsLane(KeyCounter* keyCounter) :  keyCounter(keyCounter), lastSpaceOfTrack(eNumberOfFactions)
 {
 }
 
@@ -78,9 +80,11 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
         if (newValue > 9)
         {
             // do no let in when already occupied or there is no enough keys.
-            if (lastSpaceOfTrack == eNumberOfFactions && localFactionData->getNumberOfKeys() > 0)
+            int usedKeyNumber = keyCounter->getNumberOfUsedKeys(faction);
+            if (lastSpaceOfTrack == eNumberOfFactions && localFactionData->getNumberOfKeys() > usedKeyNumber)
             {
                 newValue = 10;
+                keyCounter->useKey(faction);
                 lastSpaceOfTrack = faction;
             }
             else

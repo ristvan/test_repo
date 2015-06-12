@@ -5,11 +5,12 @@
 
 // forward declarations
 class IPowerUser;
+class KeyCounter;
 
 class CultsLane
 {
 public:
-    CultsLane();
+    CultsLane(KeyCounter *keyCounter);
     ~CultsLane();
     bool addFaction(const Factions faction,
                     IPowerUser *powerUser,
@@ -19,5 +20,6 @@ public:
 private:
     class FactionData;
     std::map<Factions, FactionData*> factionData;
+    KeyCounter* keyCounter;
     Factions lastSpaceOfTrack;
 };

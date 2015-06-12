@@ -307,7 +307,7 @@ TEST_F(CultsBoardTest, test_try_to_step_over_level_10_but_let_only_level_10_ther
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
 }
 
-TEST_F(CultsBoardTest, DISABLED_test_one_key_and_tries_to_step_lvl_10_on_more_cults)
+TEST_F(CultsBoardTest, test_one_key_and_tries_to_step_lvl_10_on_more_cults)
 {
     CultsBoard cultsBoard;
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));

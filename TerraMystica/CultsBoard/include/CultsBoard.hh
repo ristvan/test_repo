@@ -2,9 +2,11 @@
 
 #include "Cults.hh"
 #include "Factions.hh"
-#include "CultsLane.hh"
+#include "KeyCounter.hh"
+#include <map>
 
 class IPowerUser;
+class CultsLane;
 
 class CultsBoard
 {
@@ -21,5 +23,6 @@ public:
     unsigned int increaseCultValue(const Factions faction, const Cults cult, const unsigned int num);
     unsigned int getCultValue(const Factions faction, const Cults cult);
 private:
-    CultsLane values[4];
+    std::map<Cults, CultsLane*> values;
+    KeyCounter keyCounter;
 };
