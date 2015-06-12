@@ -89,7 +89,7 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
             }
             else
             {
-                newValue = 9;
+                newValue = (previousValue == 10) ? previousValue : 9;
             }
         }
         modificationValue = newValue - previousValue;

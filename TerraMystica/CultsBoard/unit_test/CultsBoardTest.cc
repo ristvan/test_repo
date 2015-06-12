@@ -402,3 +402,39 @@ TEST_F(CultsBoardTest, test_two_faction_can_not_move_to_lvl10_on_the_same_cult)
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eChaosMagicians, eAir, 2));
     ASSERT_EQ(9, cultsBoard.getCultValue(eChaosMagicians, eAir));
 }
+
+TEST_F(CultsBoardTest, test_increasing_cult_value_by_more_than_10)
+{
+    MockIPowerUser cmMockPowerUser;
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
+
+    const unsigned int ONE_KEYS = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    EXPECT_CALL(mockPowerUser, addPower(8)).Times(1);
+    ASSERT_EQ(10, cultsBoard.increaseCultValue(eWitches, eFire, 42));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eFire));
+
+    EXPECT_CALL(cmMockPowerUser, getNumberOfKeys()).Times(0);
+    EXPECT_CALL(cmMockPowerUser, addPower(5)).Times(1);
+    ASSERT_EQ(7, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 42));
+    ASSERT_EQ(9, cultsBoard.getCultValue(eChaosMagicians, eFire));
+}
+
+TEST_F(CultsBoardTest, test_increasing_cult_value_when_current_cult_value_already_10)
+{
+    MockIPowerUser cmMockPowerUser;
+    CultsBoard cultsBoard;
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
+
+    const unsigned int ONE_KEYS = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    EXPECT_CALL(mockPowerUser, addPower(8)).Times(1);
+    ASSERT_EQ(10, cultsBoard.increaseCultValue(eWitches, eFire, 42));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eFire));
+
+    ASSERT_EQ(0, cultsBoard.increaseCultValue(eWitches, eFire, 42));
+    ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eFire));
+}
