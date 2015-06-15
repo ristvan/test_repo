@@ -8,7 +8,7 @@ const unsigned int powerGainOnTrack[11] = { 0, 0, 0, 1, 1, 3, 3, 5, 5, 5, 8 };
 class CultsLane::FactionData
 {
 public:
-    FactionData(IPowerUser *powerUser, unsigned int cultsValue);
+    FactionData(IPowerUser *powerUser);
     unsigned int getNumberOfKeys() const;
     void addPower(const unsigned int power);
     unsigned int cultsValue;
@@ -16,8 +16,8 @@ private:
     IPowerUser *powerUser;
 };
 
-CultsLane::FactionData::FactionData(IPowerUser *powerUser, unsigned int cultsValue)
-    : powerUser(powerUser), cultsValue(cultsValue)
+CultsLane::FactionData::FactionData(IPowerUser *powerUser)
+    : powerUser(powerUser), cultsValue(0)
 {
 }
 
@@ -52,18 +52,43 @@ CultsLane::~CultsLane()
     }
 }
 
-bool CultsLane::addFaction(const Factions faction,
-                           IPowerUser *powerUser,
-                           const unsigned int cultValue)
+bool CultsLane::addFaction(const Factions faction, IPowerUser *powerUser)
 {
     bool successfulnessOfAddingFaction = false;
     bool canFactionBeAdded = factionData.find(faction) == factionData.end();
     if (canFactionBeAdded)
     {
-        factionData.insert(std::make_pair(faction, new FactionData(powerUser, cultValue))); 
+        factionData.insert(std::make_pair(faction, new FactionData(powerUser))); 
         successfulnessOfAddingFaction = true;
     }
     return successfulnessOfAddingFaction;
+}
+
+void CultsLane::initFaction(const Factions faction, const unsigned int cultValue)
+{
+    unsigned int actCultValue = cultValue;
+    if (factionData.find(faction) == factionData.end())
+    {
+        return;
+    }
+    FactionData *localFactionData = factionData[faction];
+
+    if (actCultValue > 9)
+    {
+        const unsigned int numberOfKeys = localFactionData->getNumberOfKeys();
+        int usedKeyNumber = keyCounter->getNumberOfUsedKeys(faction);
+        if (lastSpaceOfTrack == eNumberOfFactions && numberOfKeys > usedKeyNumber)
+        {
+            actCultValue = 10;
+            keyCounter->useKey(faction);
+            lastSpaceOfTrack = faction;
+        }
+        else
+        {
+            actCultValue = 9;
+        }
+    }
+    localFactionData->cultsValue = actCultValue;
 }
 
 

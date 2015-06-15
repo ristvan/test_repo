@@ -26,13 +26,17 @@ bool CultsBoard::addFaction(const Factions faction,
                             const unsigned int earth,
                             const unsigned int air)
 {
-    bool factionCanBeAdded = values[eFire]->addFaction(faction, powerUser, fire) &&
-                             values[eWater]->addFaction(faction, powerUser, water) &&
-                             values[eEarth]->addFaction(faction, powerUser, earth) &&
-                             values[eAir]->addFaction(faction, powerUser, air);
+    bool factionCanBeAdded = values[eFire]->addFaction(faction, powerUser) &&
+                             values[eWater]->addFaction(faction, powerUser) &&
+                             values[eEarth]->addFaction(faction, powerUser) &&
+                             values[eAir]->addFaction(faction, powerUser);
     if (factionCanBeAdded)
     {
         keyCounter.addFaction(faction);
+        values[eFire]->initFaction(faction, fire);
+        values[eWater]->initFaction(faction, water);
+        values[eEarth]->initFaction(faction, earth);
+        values[eAir]->initFaction(faction, air);
     }
     return factionCanBeAdded;
 }

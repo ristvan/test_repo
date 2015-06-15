@@ -300,8 +300,8 @@ TEST_F(CultsBoardTest, test_try_to_step_over_level_10_but_let_only_level_10_ther
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
 
     // Try to step to value 10 and it will succeed.
-    const unsigned int ONE_KEYS = 1;
-    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    const unsigned int ONE_KEY = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eWitches, eAir, 2));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
@@ -327,8 +327,8 @@ TEST_F(CultsBoardTest, test_one_key_and_tries_to_step_lvl_10_on_more_cults)
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eAir));
 
     // Try to step to value 10 and it will succeed.
-    const unsigned int ONE_KEYS = 1;
-    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    const unsigned int ONE_KEY = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eWitches, eAir, 2));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
@@ -349,7 +349,7 @@ TEST_F(CultsBoardTest, test_one_key_and_tries_to_step_lvl_10_on_more_cults)
     ASSERT_EQ(7, cultsBoard.getCultValue(eWitches, eWater));
 
     // Tries step to level 10 on Water cult, won't succeed.
-    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eWitches, eWater, 3));
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eWater));
 }
@@ -391,8 +391,8 @@ TEST_F(CultsBoardTest, test_two_faction_can_not_move_to_lvl10_on_the_same_cult)
     ASSERT_EQ(8, cultsBoard.getCultValue(eChaosMagicians, eAir));
 
     // Try to step to value 10 with Witches and it will succeed.
-    const unsigned int ONE_KEYS = 1;
-    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    const unsigned int ONE_KEY = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eWitches, eAir, 2));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eAir));
@@ -410,8 +410,8 @@ TEST_F(CultsBoardTest, test_increasing_cult_value_by_more_than_10)
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
 
-    const unsigned int ONE_KEYS = 1;
-    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    const unsigned int ONE_KEY = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
     EXPECT_CALL(mockPowerUser, addPower(8)).Times(1);
     ASSERT_EQ(10, cultsBoard.increaseCultValue(eWitches, eFire, 42));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eFire));
@@ -429,8 +429,8 @@ TEST_F(CultsBoardTest, test_increasing_cult_value_when_current_cult_value_alread
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
 
-    const unsigned int ONE_KEYS = 1;
-    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEYS));
+    const unsigned int ONE_KEY = 1;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
     EXPECT_CALL(mockPowerUser, addPower(8)).Times(1);
     ASSERT_EQ(10, cultsBoard.increaseCultValue(eWitches, eFire, 42));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eFire));
@@ -442,11 +442,11 @@ TEST_F(CultsBoardTest, test_increasing_cult_value_when_current_cult_value_alread
 TEST_F(CultsBoardTest, test_initialized_to_9_10_and_greater_than_10_it_should_be_max_10)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 9, 10, 28, 42));
-
-    const unsigned int TWO_KEYS = 1;
-    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(3).WillOnce(Return(TWO_KEYS));
+    const unsigned int TWO_KEYS = 2;
+    EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(3).WillRepeatedly(Return(TWO_KEYS));
     EXPECT_CALL(mockPowerUser, addPower(::testing::_)).Times(0);
+
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 9, 10, 28, 42));
 
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eFire));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eWater));
