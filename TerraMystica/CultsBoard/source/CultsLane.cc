@@ -2,8 +2,10 @@
 #include "IPowerUser.hh"
 #include "KeyCounter.hh"
 
-                                         /* 0  1  2  3  4  5  6  7  8  9 10 */
-const unsigned int powerGainOnTrack[11] = { 0, 0, 0, 1, 1, 3, 3, 5, 5, 5, 8 };
+const unsigned int MIN_CULT_LEVEL = 0;
+const unsigned int MAX_CULT_LEVEL = 10;
+                                                         /* 0  1  2  3  4  5  6  7  8  9 10 */
+const unsigned int powerGainOnTrack[MAX_CULT_LEVEL + 1] = { 0, 0, 0, 1, 1, 3, 3, 5, 5, 5, 8 };
 
 class CultsLane::FactionData
 {
@@ -17,7 +19,7 @@ private:
 };
 
 CultsLane::FactionData::FactionData(IPowerUser *powerUser)
-    : powerUser(powerUser), cultsValue(0)
+    : powerUser(powerUser), cultsValue(MIN_CULT_LEVEL)
 {
 }
 
@@ -40,7 +42,7 @@ void CultsLane::FactionData::addPower(const unsigned int power)
 }
 
 // CultsLane implementation
-CultsLane::CultsLane(KeyCounter* keyCounter) :  keyCounter(keyCounter), lastSpaceOfTrack(eNumberOfFactions)
+CultsLane::CultsLane(KeyCounter& keyCounter) :  keyCounter(keyCounter), lastSpaceOfTrack(eNumberOfFactions)
 {
 }
 
@@ -73,19 +75,19 @@ void CultsLane::initFaction(const Factions faction, const unsigned int cultValue
     }
     FactionData *localFactionData = factionData[faction];
 
-    if (actCultValue > 9)
+    if (actCultValue > MAX_CULT_LEVEL - 1)
     {
         const unsigned int numberOfKeys = localFactionData->getNumberOfKeys();
-        int usedKeyNumber = keyCounter->getNumberOfUsedKeys(faction);
+        int usedKeyNumber = keyCounter.getNumberOfUsedKeys(faction);
         if (lastSpaceOfTrack == eNumberOfFactions && numberOfKeys > usedKeyNumber)
         {
-            actCultValue = 10;
-            keyCounter->useKey(faction);
+            actCultValue = MAX_CULT_LEVEL;
+            keyCounter.useKey(faction);
             lastSpaceOfTrack = faction;
         }
         else
         {
-            actCultValue = 9;
+            actCultValue = MAX_CULT_LEVEL - 1;
         }
     }
     localFactionData->cultsValue = actCultValue;
@@ -94,7 +96,7 @@ void CultsLane::initFaction(const Factions faction, const unsigned int cultValue
 
 unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned int value)
 {
-    unsigned int modificationValue = 0;
+    unsigned int modificationValue = MIN_CULT_LEVEL;
     if (factionData.find(faction) != factionData.end())
     {
         FactionData *localFactionData = factionData[faction];
@@ -102,19 +104,19 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
 
         const unsigned int previousValue = localFactionData->cultsValue;
         unsigned int newValue = previousValue + modificationValue;
-        if (newValue > 9)
+        if (newValue > MAX_CULT_LEVEL - 1)
         {
             // do no let in when already occupied or there is no enough keys.
-            int usedKeyNumber = keyCounter->getNumberOfUsedKeys(faction);
+            int usedKeyNumber = keyCounter.getNumberOfUsedKeys(faction);
             if (lastSpaceOfTrack == eNumberOfFactions && localFactionData->getNumberOfKeys() > usedKeyNumber)
             {
-                newValue = 10;
-                keyCounter->useKey(faction);
+                newValue = MAX_CULT_LEVEL;
+                keyCounter.useKey(faction);
                 lastSpaceOfTrack = faction;
             }
             else
             {
-                newValue = (previousValue == 10) ? previousValue : 9;
+                newValue = (previousValue == MAX_CULT_LEVEL) ? previousValue : MAX_CULT_LEVEL - 1;
             }
         }
         modificationValue = newValue - previousValue;
@@ -128,7 +130,7 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
 
 unsigned int CultsLane::getCultValue(const Factions faction) const
 {
-    unsigned int cultValue = 0;
+    unsigned int cultValue = MIN_CULT_LEVEL;
     if (factionData.find(faction) != factionData.end())
     {
         cultValue = factionData.at(faction)->cultsValue;

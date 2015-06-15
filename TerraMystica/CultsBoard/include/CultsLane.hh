@@ -10,7 +10,7 @@ class KeyCounter;
 class CultsLane
 {
 public:
-    CultsLane(KeyCounter *keyCounter);
+    CultsLane(KeyCounter &keyCounter);
     ~CultsLane();
     bool addFaction(const Factions faction, IPowerUser *powerUser);
     void initFaction(const Factions faction, const unsigned int cultValue);
@@ -19,6 +19,6 @@ public:
 private:
     class FactionData;
     std::map<Factions, FactionData*> factionData;
-    KeyCounter* keyCounter;
+    KeyCounter& keyCounter;
     Factions lastSpaceOfTrack;
 };

@@ -5,10 +5,10 @@
 
 CultsBoard::CultsBoard()
 {
-   values.insert(std::make_pair(eFire,  new CultsLane(&keyCounter)));
-   values.insert(std::make_pair(eWater,  new CultsLane(&keyCounter)));
-   values.insert(std::make_pair(eEarth,  new CultsLane(&keyCounter)));
-   values.insert(std::make_pair(eAir,  new CultsLane(&keyCounter)));
+   values.insert(std::make_pair(eFire,  new CultsLane(keyCounter)));
+   values.insert(std::make_pair(eWater,  new CultsLane(keyCounter)));
+   values.insert(std::make_pair(eEarth,  new CultsLane(keyCounter)));
+   values.insert(std::make_pair(eAir,  new CultsLane(keyCounter)));
 }
 
 CultsBoard::~CultsBoard()
