@@ -22,7 +22,7 @@ TEST_F(CultsBoardTest, test_add_faction)
     CultsBoard cultsBoard;
     EXPECT_CALL(mockPowerUser, addPower(::testing::_)).Times(0);
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(0);
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, 2, 0, 0, 0));
     ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eEarth));
@@ -32,7 +32,7 @@ TEST_F(CultsBoardTest, test_add_faction)
 TEST_F(CultsBoardTest, test_try_to_add_the_same_faction_twice)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, 2, 0, 0, 0));
     ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eFire));
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eEarth));
@@ -52,7 +52,7 @@ TEST_F(CultsBoardTest, test_try_to_add_the_same_faction_twice)
     ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eEarth));
     ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eAir));
 
-    ASSERT_FALSE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    ASSERT_FALSE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, 2, 0, 0, 0));
     ASSERT_EQ(5, cultsBoard.getCultValue(eChaosMagicians, eFire));
     ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eWater));
     ASSERT_EQ(3, cultsBoard.getCultValue(eChaosMagicians, eEarth));
@@ -65,7 +65,7 @@ TEST_F(CultsBoardTest, test_increasing_value_before_adding_faction_is_not_possib
     NullPowerUser nullPowerUser;
     ASSERT_EQ(0, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 2));
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eWater));
 }
@@ -74,7 +74,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_on_one_track)
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
 }
@@ -82,7 +82,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_on_one_track)
 TEST_F(CultsBoardTest, test_increasing_value_by_2_on_one_track_for_ChaosMagicians)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &mockPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, 2, 0, 0, 0));
 
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
     ASSERT_EQ(3, cultsBoard.increaseCultValue(eChaosMagicians, eFire, 3));
@@ -105,7 +105,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_on_one_track)
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
     ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eFire));
 }
@@ -114,7 +114,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_3_on_one_track)
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(3, cultsBoard.increaseCultValue(eFakirs, eFire, 3));
     ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
@@ -124,7 +124,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_then_2_on_one_tr
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
     ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eFire));
@@ -137,7 +137,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_one_tr
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -150,7 +150,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_two_tr
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -173,8 +173,8 @@ TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_on_one_track)
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -189,8 +189,8 @@ TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_then_1_on_two_t
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 0, 0, 0));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 0, 0, 0, 0));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -245,9 +245,9 @@ TEST_F(CultsBoardTest, test_increasing_value_for_3_factions_by_2_on_one_track)
 {
     CultsBoard cultsBoard;
     NullPowerUser nullPowerUser;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 0, 0, 0));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 0, 0, 0, 0));
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, nullPowerUser, 0, 0, 0, 0));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -268,7 +268,7 @@ TEST_F(CultsBoardTest, test_increasing_value_for_3_factions_by_2_on_one_track)
 TEST_F(CultsBoardTest, test_dont_let_step_to_level_10_because_no_keys_has_the_faction)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
 
     // Step to value 5
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
@@ -294,7 +294,7 @@ TEST_F(CultsBoardTest, test_dont_let_step_to_level_10_because_no_keys_has_the_fa
 TEST_F(CultsBoardTest, test_try_to_step_over_level_10_but_let_only_level_10_there_is_a_key)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
 
     // Step to value 5
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
@@ -321,7 +321,7 @@ TEST_F(CultsBoardTest, test_try_to_step_over_level_10_but_let_only_level_10_ther
 TEST_F(CultsBoardTest, test_one_key_and_tries_to_step_lvl_10_on_more_cults)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
 
     // Step to value 5 on Air
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
@@ -369,8 +369,8 @@ TEST_F(CultsBoardTest, test_two_faction_can_not_move_to_lvl10_on_the_same_cult)
 {
     MockIPowerUser cmMockPowerUser;
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, cmMockPowerUser, 2, 0, 0, 0));
 
     // Step to value 5 on Air with Witches
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
@@ -418,8 +418,8 @@ TEST_F(CultsBoardTest, test_increasing_cult_value_by_more_than_10)
 {
     MockIPowerUser cmMockPowerUser;
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, cmMockPowerUser, 2, 0, 0, 0));
 
     const unsigned int ONE_KEY = 1;
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
@@ -437,8 +437,8 @@ TEST_F(CultsBoardTest, test_increasing_cult_value_when_current_cult_value_alread
 {
     MockIPowerUser cmMockPowerUser;
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 0, 0, 0, 2));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &cmMockPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, cmMockPowerUser, 2, 0, 0, 0));
 
     const unsigned int ONE_KEY = 1;
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(1).WillOnce(Return(ONE_KEY));
@@ -457,7 +457,7 @@ TEST_F(CultsBoardTest, test_initialized_to_9_10_and_greater_than_10_it_should_be
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(3).WillRepeatedly(Return(TWO_KEYS));
     EXPECT_CALL(mockPowerUser, addPower(::testing::_)).Times(0);
 
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &mockPowerUser, 9, 10, 28, 42));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 9, 10, 28, 42));
 
     ASSERT_EQ(9, cultsBoard.getCultValue(eWitches, eFire));
     ASSERT_EQ(10, cultsBoard.getCultValue(eWitches, eWater));

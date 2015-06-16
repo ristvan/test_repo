@@ -20,7 +20,7 @@ CultsBoard::~CultsBoard()
 }
 
 bool CultsBoard::addFaction(const Factions faction,
-                            IPowerUser *powerUser,
+                            IPowerUser &powerUser,
                             const unsigned int fire,
                             const unsigned int water,
                             const unsigned int earth,
