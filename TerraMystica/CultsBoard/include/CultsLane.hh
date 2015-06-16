@@ -18,6 +18,8 @@ public:
     unsigned int getCultValue(const Factions faction) const;
 private:
     class FactionData;
+
+    unsigned int calculateReachingMaxLevel(FactionData &, unsigned int, unsigned int);
     std::map<Factions, FactionData*> factionData;
     KeyCounter& keyCounter;
     Factions lastSpaceOfTrack;

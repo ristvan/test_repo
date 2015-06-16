@@ -10,16 +10,18 @@ const unsigned int powerGainOnTrack[MAX_CULT_LEVEL + 1] = { 0, 0, 0, 1, 1, 3, 3,
 class CultsLane::FactionData
 {
 public:
-    FactionData(IPowerUser *powerUser);
+    FactionData(IPowerUser *powerUser, Factions faction);
     unsigned int getNumberOfKeys() const;
     void addPower(const unsigned int power);
+    Factions getFaction() const { return faction; }
     unsigned int cultsValue;
 private:
     IPowerUser *powerUser;
+    Factions faction;
 };
 
-CultsLane::FactionData::FactionData(IPowerUser *powerUser)
-    : powerUser(powerUser), cultsValue(MIN_CULT_LEVEL)
+CultsLane::FactionData::FactionData(IPowerUser *powerUser, Factions faction)
+    : cultsValue(MIN_CULT_LEVEL), powerUser(powerUser), faction(faction)
 {
 }
 
@@ -60,10 +62,32 @@ bool CultsLane::addFaction(const Factions faction, IPowerUser *powerUser)
     bool canFactionBeAdded = factionData.find(faction) == factionData.end();
     if (canFactionBeAdded)
     {
-        factionData.insert(std::make_pair(faction, new FactionData(powerUser))); 
+        factionData.insert(std::make_pair(faction, new FactionData(powerUser, faction))); 
         successfulnessOfAddingFaction = true;
     }
     return successfulnessOfAddingFaction;
+}
+
+unsigned int CultsLane::calculateReachingMaxLevel(CultsLane::FactionData &factionData,
+                                                  unsigned int fromCultValue,
+                                                  unsigned int toCultValue)
+{
+    if (toCultValue > MAX_CULT_LEVEL - 1)
+    {
+        // do no let in when already occupied or there is no enough keys.
+        int usedKeyNumber = keyCounter.getNumberOfUsedKeys(factionData.getFaction());
+        if (lastSpaceOfTrack == eNumberOfFactions && factionData.getNumberOfKeys() > usedKeyNumber)
+        {
+            toCultValue = MAX_CULT_LEVEL;
+            keyCounter.useKey(factionData.getFaction());
+            lastSpaceOfTrack = factionData.getFaction();
+        }
+        else
+        {
+            toCultValue = (fromCultValue == MAX_CULT_LEVEL) ? fromCultValue : MAX_CULT_LEVEL - 1;
+        }
+    }
+    return toCultValue;
 }
 
 void CultsLane::initFaction(const Factions faction, const unsigned int cultValue)
@@ -75,21 +99,8 @@ void CultsLane::initFaction(const Factions faction, const unsigned int cultValue
     }
     FactionData *localFactionData = factionData[faction];
 
-    if (actCultValue > MAX_CULT_LEVEL - 1)
-    {
-        const unsigned int numberOfKeys = localFactionData->getNumberOfKeys();
-        int usedKeyNumber = keyCounter.getNumberOfUsedKeys(faction);
-        if (lastSpaceOfTrack == eNumberOfFactions && numberOfKeys > usedKeyNumber)
-        {
-            actCultValue = MAX_CULT_LEVEL;
-            keyCounter.useKey(faction);
-            lastSpaceOfTrack = faction;
-        }
-        else
-        {
-            actCultValue = MAX_CULT_LEVEL - 1;
-        }
-    }
+    actCultValue = calculateReachingMaxLevel(*localFactionData, MIN_CULT_LEVEL, cultValue);
+
     localFactionData->cultsValue = actCultValue;
 }
 
@@ -104,21 +115,9 @@ unsigned int CultsLane::increaseCultValue(const Factions faction, const unsigned
 
         const unsigned int previousValue = localFactionData->cultsValue;
         unsigned int newValue = previousValue + modificationValue;
-        if (newValue > MAX_CULT_LEVEL - 1)
-        {
-            // do no let in when already occupied or there is no enough keys.
-            int usedKeyNumber = keyCounter.getNumberOfUsedKeys(faction);
-            if (lastSpaceOfTrack == eNumberOfFactions && localFactionData->getNumberOfKeys() > usedKeyNumber)
-            {
-                newValue = MAX_CULT_LEVEL;
-                keyCounter.useKey(faction);
-                lastSpaceOfTrack = faction;
-            }
-            else
-            {
-                newValue = (previousValue == MAX_CULT_LEVEL) ? previousValue : MAX_CULT_LEVEL - 1;
-            }
-        }
+
+        newValue = calculateReachingMaxLevel(*localFactionData, previousValue, newValue);
+
         modificationValue = newValue - previousValue;
         const unsigned int realPowerGain = powerGainOnTrack[newValue] - powerGainOnTrack[previousValue];
 
