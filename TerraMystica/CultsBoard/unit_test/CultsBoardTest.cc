@@ -2,6 +2,7 @@
 #include "Factions.hh"
 #include "gtest/gtest.h"
 #include "MockIPowerUser.hh"
+#include "NullPowerUser.hh" // Stub
 #include <iostream>
 
 using namespace std;
@@ -61,9 +62,10 @@ TEST_F(CultsBoardTest, test_try_to_add_the_same_faction_twice)
 TEST_F(CultsBoardTest, test_increasing_value_before_adding_faction_is_not_possible)
 {
     CultsBoard cultsBoard;
+    NullPowerUser nullPowerUser;
     ASSERT_EQ(0, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 2));
     ASSERT_EQ(0, cultsBoard.getCultValue(eChaosMagicians, eWater));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, 0, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 2, 0, 0, 0));
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eChaosMagicians, eWater));
 }

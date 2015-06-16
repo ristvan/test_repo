@@ -1,4 +1,4 @@
-include_directories(${GTEST_INCLUDE_DIR} ../include ../../Common/include ./mocks)
+include_directories(${GTEST_INCLUDE_DIR} ../include ../../Common/include ./mocks ./stubs)
 link_directories(${GTEST_LIB_DIR})
 
 add_executable(CultsBoardTest CultsBoardTest.cc TestMain.cc)
