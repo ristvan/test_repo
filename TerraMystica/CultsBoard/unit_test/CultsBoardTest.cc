@@ -73,7 +73,8 @@ TEST_F(CultsBoardTest, test_increasing_value_before_adding_faction_is_not_possib
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
 }
@@ -103,7 +104,8 @@ TEST_F(CultsBoardTest, test_increasing_value_by_2_on_one_track_for_ChaosMagician
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
     ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eFire));
 }
@@ -111,7 +113,8 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_on_one_track)
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_3_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(3, cultsBoard.increaseCultValue(eFakirs, eFire, 3));
     ASSERT_EQ(3, cultsBoard.getCultValue(eFakirs, eFire));
@@ -120,7 +123,8 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_3_on_one_track)
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_then_2_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(1, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
     ASSERT_EQ(1, cultsBoard.getCultValue(eFakirs, eFire));
@@ -132,7 +136,8 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_1_then_2_on_one_tr
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -144,7 +149,8 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_one_tr
 TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_two_tracks)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -166,8 +172,9 @@ TEST_F(CultsBoardTest, test_increasing_value_for_1_faction_by_2_then_1_on_two_tr
 TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 1, 0, 1));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, 0, 2, 0, 0, 0));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 1, 0, 1));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 2, 0, 0, 0));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -181,8 +188,9 @@ TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_on_one_track)
 TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_then_1_on_two_tracks)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 0, 0, 0));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, 0, 0, 0, 0, 0));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 0, 0, 0, 0));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
@@ -236,9 +244,10 @@ TEST_F(CultsBoardTest, test_increasing_value_for_2_factions_by_2_then_1_on_two_t
 TEST_F(CultsBoardTest, test_increasing_value_for_3_factions_by_2_on_one_track)
 {
     CultsBoard cultsBoard;
-    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, 0, 0, 0, 0, 0));
-    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, 0, 0, 0, 0, 0));
-    ASSERT_TRUE(cultsBoard.addFaction(eWitches, 0, 0, 0, 0, 0));
+    NullPowerUser nullPowerUser;
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, &nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, &nullPowerUser, 0, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, &nullPowerUser, 0, 0, 0, 0));
 
     ASSERT_EQ(2, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
     ASSERT_EQ(2, cultsBoard.getCultValue(eFakirs, eFire));
