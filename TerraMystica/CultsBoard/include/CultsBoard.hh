@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ICultsBoard.hh"
 #include "Cults.hh"
 #include "Factions.hh"
 #include "KeyCounter.hh"
@@ -8,7 +9,7 @@
 class IPowerUser;
 class CultsLane;
 
-class CultsBoard
+class CultsBoard : public ICultsBoard
 {
 public:
     CultsBoard();
@@ -22,6 +23,9 @@ public:
 
     unsigned int increaseCultValue(const Factions faction, const Cults cult, const unsigned int num);
     unsigned int getCultValue(const Factions faction, const Cults cult);
+
+    unsigned int sendPriestToMaxSteps(const Factions faction, const Cults cult);
+    unsigned int sendPriestToOneStep(const Factions faction, const Cults cult);
 private:
     std::map<Cults, CultsLane*> values;
     KeyCounter keyCounter;
