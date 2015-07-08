@@ -53,7 +53,7 @@ unsigned int CultsBoard::getCultValue(const Factions faction, const Cults cult)
 
 unsigned int CultsBoard::sendPriestToMaxSteps(const Factions faction, const Cults cult)
 {
-    return 0;
+    return values[cult]->sendPriestToMaxSteps(faction);
 }
 
 unsigned int CultsBoard::sendPriestToOneStep(const Factions faction, const Cults cult)

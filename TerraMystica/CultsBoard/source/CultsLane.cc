@@ -41,7 +41,7 @@ void CultsLane::FactionData::addPower(const unsigned int power)
 }
 
 // CultsLane implementation
-CultsLane::CultsLane(KeyCounter& keyCounter) :  keyCounter(keyCounter), lastSpaceOfTrack(eNumberOfFactions)
+CultsLane::CultsLane(KeyCounter& keyCounter) :  keyCounter(keyCounter), lastSpaceOfTrack(eNumberOfFactions), numberOfSentPriests(0)
 {
 }
 
@@ -72,7 +72,7 @@ unsigned int CultsLane::calculateReachingMaxLevel(CultsLane::FactionData &factio
     if (toCultValue > MAX_CULT_LEVEL - 1)
     {
         // do no let in when already occupied or there is no enough keys.
-        int usedKeyNumber = keyCounter.getNumberOfUsedKeys(factionData.getFaction());
+        unsigned int usedKeyNumber = keyCounter.getNumberOfUsedKeys(factionData.getFaction());
         if (lastSpaceOfTrack == eNumberOfFactions && factionData.getNumberOfKeys() > usedKeyNumber)
         {
             toCultValue = MAX_CULT_LEVEL;
@@ -132,4 +132,21 @@ unsigned int CultsLane::getCultValue(const Factions faction) const
         cultValue = factionData.at(faction)->cultsValue;
     }
     return cultValue;
+}
+
+unsigned int CultsLane::sendPriestToMaxSteps(const Factions faction)
+{
+    unsigned int steps = 1;
+    switch (numberOfSentPriests)
+    {
+       case 0: ++steps;
+       case 1:
+       case 2:
+       case 3: ++steps;
+               ++numberOfSentPriests;
+               break;
+       case 4:
+              break;
+    }
+    return increaseCultValue(faction, steps);
 }

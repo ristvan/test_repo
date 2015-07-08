@@ -16,6 +16,7 @@ public:
     void initFaction(const Factions faction, const unsigned int cultValue);
     unsigned int increaseCultValue(const Factions faction, const unsigned int value);
     unsigned int getCultValue(const Factions faction) const;
+    unsigned int sendPriestToMaxSteps(const Factions faction);
 private:
     class FactionData;
 
@@ -23,4 +24,5 @@ private:
     std::map<Factions, FactionData*> factionData;
     KeyCounter& keyCounter;
     Factions lastSpaceOfTrack;
+    unsigned int numberOfSentPriests;
 };

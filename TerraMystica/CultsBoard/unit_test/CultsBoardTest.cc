@@ -487,3 +487,89 @@ TEST_F(CultsBoardTest, initialized_to_9_10_and_greater_than_10_it_should_be_max_
     ASSERT_EQ(CULT_TEN, cultsBoard.getCultValue(eWitches, eEarth));
     ASSERT_EQ(CULT_NINE, cultsBoard.getCultValue(eWitches, eAir));
 }
+
+TEST_F(CultsBoardTest, sending_priest_to_a_cult_track_should_increase_by_3_at_first_time)
+{
+    CultsBoard cultsBoard;
+    NullPowerUser nullPowerUser;
+
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
+
+    ASSERT_EQ(CULT_THREE, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eWater));
+    ASSERT_EQ(CULT_THREE, cultsBoard.getCultValue(eChaosMagicians, eWater));
+}
+
+TEST_F(CultsBoardTest, sending_priest_should_increase_by_2_when_its_the_second_priest)
+{
+    CultsBoard cultsBoard;
+    NullPowerUser nullPowerUser;
+
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
+
+    ASSERT_EQ(CULT_THREE, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eWater));
+    ASSERT_EQ(CULT_THREE, cultsBoard.getCultValue(eChaosMagicians, eWater));
+
+    ASSERT_EQ(CULT_TWO, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eWater));
+    ASSERT_EQ(CULT_FIVE, cultsBoard.getCultValue(eChaosMagicians, eWater));
+}
+
+TEST_F(CultsBoardTest, sending_priest_should_increasing_by_1_after_the_fourth_sent_priest)
+{
+    CultsBoard cultsBoard;
+    NullPowerUser nullPowerUser;
+
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, nullPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 1, 0, 0, 1));
+
+    ASSERT_EQ(CULT_THREE, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eEarth));
+    ASSERT_EQ(CULT_THREE, cultsBoard.getCultValue(eChaosMagicians, eEarth)); 
+    
+    ASSERT_EQ(CULT_TWO, cultsBoard.sendPriestToMaxSteps(eWitches, eEarth));
+    ASSERT_EQ(CULT_TWO, cultsBoard.getCultValue(eWitches, eEarth)); 
+
+    ASSERT_EQ(CULT_TWO, cultsBoard.sendPriestToMaxSteps(eFakirs, eEarth));
+    ASSERT_EQ(CULT_TWO, cultsBoard.getCultValue(eFakirs, eEarth)); 
+
+    ASSERT_EQ(CULT_TWO, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eEarth));
+    ASSERT_EQ(CULT_FIVE, cultsBoard.getCultValue(eChaosMagicians, eEarth)); 
+
+    ASSERT_EQ(CULT_ONE, cultsBoard.sendPriestToMaxSteps(eWitches, eEarth));
+    ASSERT_EQ(CULT_THREE, cultsBoard.getCultValue(eWitches, eEarth)); 
+}
+
+TEST_F(CultsBoardTest, sending_priest_should_not_affect_on_other_factions)
+{
+    CultsBoard cultsBoard;
+    NullPowerUser nullPowerUser;
+
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, nullPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 1, 0, 0, 1));
+
+    ASSERT_EQ(CULT_TWO, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(CULT_ZERO, cultsBoard.getCultValue(eWitches, eFire));
+    ASSERT_EQ(CULT_ONE, cultsBoard.getCultValue(eFakirs, eFire));
+
+    ASSERT_EQ(CULT_THREE, cultsBoard.sendPriestToMaxSteps(eFakirs, eFire));
+    ASSERT_EQ(CULT_FOUR, cultsBoard.getCultValue(eFakirs, eFire)); 
+    ASSERT_EQ(CULT_TWO, cultsBoard.getCultValue(eChaosMagicians, eFire));
+    ASSERT_EQ(CULT_ZERO, cultsBoard.getCultValue(eWitches, eFire));
+}
+
+TEST_F(CultsBoardTest, stepping_over_power_lines_should_be_indicated_with_call_back)
+{
+    CultsBoard cultsBoard;
+
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, 2, 0, 0, 0));
+
+    EXPECT_CALL(mockPowerUser, addPower(CULT_THREE)).Times(1);
+
+    ASSERT_EQ(CULT_THREE, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eFire));
+    ASSERT_EQ(CULT_FIVE, cultsBoard.getCultValue(eChaosMagicians, eFire));
+
+    EXPECT_CALL(mockPowerUser, addPower(CULT_TWO)).Times(1);
+
+    ASSERT_EQ(CULT_TWO, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eFire));
+    ASSERT_EQ(CULT_SEVEN, cultsBoard.getCultValue(eChaosMagicians, eFire));
+}
