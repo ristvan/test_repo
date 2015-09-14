@@ -590,3 +590,31 @@ TEST_F(CultsBoardTest, stepping_over_power_lines_should_be_indicated_with_call_b
     ASSERT_EQ(CULT_TWO, cultsBoard.sendPriestToMaxSteps(eChaosMagicians, eFire));
     ASSERT_EQ(CULT_SEVEN, cultsBoard.getCultValue(eChaosMagicians, eFire));
 }
+
+TEST_F(CultsBoardTest, when_priest_is_sent_to_step_one_it_should_increase_cult_influnce_by_one_all_the_time)
+{
+    CultsBoardImpl cultsBoard;
+    NullPowerUser nullPowerUser;
+
+    ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
+    ASSERT_TRUE(cultsBoard.addFaction(eWitches, nullPowerUser, 0, 0, 0, 2));
+    ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 1, 0, 0, 1));
+ 
+    // When all other spaces are free
+    ASSERT_EQ(CULT_ONE, cultsBoard.sendPriestToOneStep(eChaosMagicians, eFire));
+    ASSERT_EQ(CULT_THREE, cultsBoard.getCultValue(eChaosMagicians, eFire));
+
+    // occupy the space for the 3 steps
+    ASSERT_EQ(CULT_THREE, cultsBoard.sendPriestToMaxSteps(eWitches, eFire));
+    ASSERT_EQ(CULT_THREE, cultsBoard.getCultValue(eWitches, eFire));
+
+    ASSERT_EQ(CULT_ONE, cultsBoard.sendPriestToOneStep(eChaosMagicians, eFire));
+    ASSERT_EQ(CULT_FOUR, cultsBoard.getCultValue(eChaosMagicians, eFire));
+
+    // occupy one of the 2 steps spaces
+    ASSERT_EQ(CULT_TWO, cultsBoard.sendPriestToMaxSteps(eWitches, eFire));
+    ASSERT_EQ(CULT_FIVE, cultsBoard.getCultValue(eWitches, eFire));
+
+    ASSERT_EQ(CULT_ONE, cultsBoard.sendPriestToOneStep(eChaosMagicians, eFire));
+    ASSERT_EQ(CULT_FIVE, cultsBoard.getCultValue(eChaosMagicians, eFire));
+}

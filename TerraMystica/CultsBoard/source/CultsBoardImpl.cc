@@ -58,5 +58,5 @@ unsigned int CultsBoardImpl::sendPriestToMaxSteps(const Factions faction, const 
 
 unsigned int CultsBoardImpl::sendPriestToOneStep(const Factions faction, const Cults cult)
 {
-    return 0;
+    return values[cult]->increaseCultValue(faction, 1);
 }
