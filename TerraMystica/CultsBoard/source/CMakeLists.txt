@@ -1,3 +1,11 @@
-include_directories(../include ../../Common/include)
+include_directories(
+    ../include 
+    ../../Common/include
+)
 
-add_library(CultsBoard CultsBoard.cc CultsLane.cc KeyCounter.cc)
+add_library(
+    CultsBoard
+    CultsBoardImpl.cc
+    CultsLane.cc
+    KeyCounter.cc
+)

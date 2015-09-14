@@ -1,5 +1,5 @@
 #include "CultsLane.hh"
-#include "IPowerUser.hh"
+#include "PowerUser.hh"
 #include "KeyCounter.hh"
 
 const unsigned int MIN_CULT_LEVEL = 0;
@@ -10,17 +10,17 @@ const unsigned int powerGainOnTrack[MAX_CULT_LEVEL + 1] = { 0, 0, 0, 1, 1, 3, 3,
 class CultsLane::FactionData
 {
 public:
-    FactionData(IPowerUser &powerUser, Factions faction);
+    FactionData(PowerUser &powerUser, Factions faction);
     unsigned int getNumberOfKeys() const;
     void addPower(const unsigned int power);
     Factions getFaction() const { return faction; }
     unsigned int cultsValue;
 private:
-    IPowerUser &powerUser;
+    PowerUser &powerUser;
     Factions faction;
 };
 
-CultsLane::FactionData::FactionData(IPowerUser &powerUser, Factions faction)
+CultsLane::FactionData::FactionData(PowerUser &powerUser, Factions faction)
     : cultsValue(MIN_CULT_LEVEL), powerUser(powerUser), faction(faction)
 {
 }
@@ -53,7 +53,7 @@ CultsLane::~CultsLane()
     }
 }
 
-bool CultsLane::addFaction(const Factions faction, IPowerUser &powerUser)
+bool CultsLane::addFaction(const Factions faction, PowerUser &powerUser)
 {
     bool successfulnessOfAddingFaction = false;
     bool canFactionBeAdded = factionData.find(faction) == factionData.end();

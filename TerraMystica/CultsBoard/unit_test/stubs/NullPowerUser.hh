@@ -1,8 +1,8 @@
 #pragma once
 
-#include "IPowerUser.hh"
+#include "PowerUser.hh"
 
-class NullPowerUser : public IPowerUser
+class NullPowerUser : public PowerUser
 {
 public:
     virtual void addPower(const unsigned int) {}

@@ -1,9 +1,9 @@
-#include "CultsBoard.hh"
+#include "CultsBoardImpl.hh"
 #include "CultsLane.hh"
 #include "Cults.hh"
-#include "IPowerUser.hh"
+#include "PowerUser.hh"
 
-CultsBoard::CultsBoard()
+CultsBoardImpl::CultsBoardImpl()
 {
     values.insert(std::make_pair(eFire, new CultsLane(keyCounter)));
     values.insert(std::make_pair(eWater, new CultsLane(keyCounter)));
@@ -11,7 +11,7 @@ CultsBoard::CultsBoard()
     values.insert(std::make_pair(eAir, new CultsLane(keyCounter)));
 }
 
-CultsBoard::~CultsBoard()
+CultsBoardImpl::~CultsBoardImpl()
 {
     delete values[eFire];
     delete values[eWater];
@@ -19,8 +19,8 @@ CultsBoard::~CultsBoard()
     delete values[eAir];
 }
 
-bool CultsBoard::addFaction(const Factions faction,
-                            IPowerUser &powerUser,
+bool CultsBoardImpl::addFaction(const Factions faction,
+                            PowerUser &powerUser,
                             const unsigned int fire,
                             const unsigned int water,
                             const unsigned int earth,
@@ -41,22 +41,22 @@ bool CultsBoard::addFaction(const Factions faction,
     return factionCanBeAdded;
 }
 
-unsigned int CultsBoard::increaseCultValue(const Factions faction, const Cults cult, unsigned int value)
+unsigned int CultsBoardImpl::increaseCultValue(const Factions faction, const Cults cult, unsigned int value)
 {
     return values[cult]->increaseCultValue(faction, value);
 }
 
-unsigned int CultsBoard::getCultValue(const Factions faction, const Cults cult)
+unsigned int CultsBoardImpl::getCultValue(const Factions faction, const Cults cult)
 {
     return values[cult]->getCultValue(faction);
 }
 
-unsigned int CultsBoard::sendPriestToMaxSteps(const Factions faction, const Cults cult)
+unsigned int CultsBoardImpl::sendPriestToMaxSteps(const Factions faction, const Cults cult)
 {
     return values[cult]->sendPriestToMaxSteps(faction);
 }
 
-unsigned int CultsBoard::sendPriestToOneStep(const Factions faction, const Cults cult)
+unsigned int CultsBoardImpl::sendPriestToOneStep(const Factions faction, const Cults cult)
 {
     return 0;
 }

@@ -1,7 +1,7 @@
-#include "CultsBoard.hh"
+#include "CultsBoardImpl.hh"
 #include "Factions.hh"
 #include "gtest/gtest.h"
-#include "MockIPowerUser.hh"
+#include "MockPowerUser.hh"
 #include "NullPowerUser.hh" // Stub
 #include <iostream>
 
@@ -14,7 +14,7 @@ protected:
     virtual void SetUp() { }
     virtual void TearDown() { }
 protected:
-   MockIPowerUser mockPowerUser;
+   MockPowerUser mockPowerUser;
 };
 
 const unsigned int NOT_CALLED = 0;
@@ -34,7 +34,7 @@ const unsigned int CULT_TEN = 10;
 
 TEST_F(CultsBoardTest, adding_faction_should_success_with_2000_as_start_values)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
 
     EXPECT_CALL(mockPowerUser, addPower(::testing::_)).Times(NOT_CALLED);
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(NOT_CALLED);
@@ -48,7 +48,8 @@ TEST_F(CultsBoardTest, adding_faction_should_success_with_2000_as_start_values)
 
 TEST_F(CultsBoardTest, adding_the_same_faction_again_should_not_change_the_cult_values)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
+
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, CULT_TWO, CULT_ZERO, CULT_ZERO, CULT_ZERO));
 
     ASSERT_EQ(CULT_TWO, cultsBoard.getCultValue(eChaosMagicians, eFire));
@@ -80,8 +81,9 @@ TEST_F(CultsBoardTest, adding_the_same_faction_again_should_not_change_the_cult_
 
 TEST_F(CultsBoardTest, increasing_value_before_adding_faction_should_not_work)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_EQ(CULT_ZERO, cultsBoard.increaseCultValue(eChaosMagicians, eWater, 2));
     ASSERT_EQ(CULT_ZERO, cultsBoard.getCultValue(eChaosMagicians, eWater));
 
@@ -93,7 +95,7 @@ TEST_F(CultsBoardTest, increasing_value_before_adding_faction_should_not_work)
 
 TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_2_on_one_track)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
 
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
@@ -104,7 +106,7 @@ TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_2_on_one_track)
 
 TEST_F(CultsBoardTest, increasing_value_by_2_on_one_track_for_ChaosMagicians)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, 2, 0, 0, 0));
 
     EXPECT_CALL(mockPowerUser, addPower(3)).Times(1);
@@ -126,8 +128,9 @@ TEST_F(CultsBoardTest, increasing_value_by_2_on_one_track_for_ChaosMagicians)
 
 TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_1_on_one_track)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
     ASSERT_EQ(CULT_ONE, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
     ASSERT_EQ(CULT_ONE, cultsBoard.getCultValue(eFakirs, eFire));
@@ -135,8 +138,9 @@ TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_1_on_one_track)
 
 TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_3_on_one_track)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(CULT_THREE, cultsBoard.increaseCultValue(eFakirs, eFire, 3));
@@ -145,8 +149,9 @@ TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_3_on_one_track)
 
 TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_1_then_2_on_one_track)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(CULT_ONE, cultsBoard.increaseCultValue(eFakirs, eFire, 1));
@@ -158,8 +163,9 @@ TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_1_then_2_on_one_track)
 
 TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_2_then_1_on_one_track)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(CULT_TWO, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
@@ -171,8 +177,9 @@ TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_2_then_1_on_one_track)
 
 TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_2_then_1_on_two_tracks)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
 
     ASSERT_EQ(CULT_TWO, cultsBoard.increaseCultValue(eFakirs, eFire, 2));
@@ -194,8 +201,9 @@ TEST_F(CultsBoardTest, increasing_value_for_1_faction_by_2_then_1_on_two_tracks)
 
 TEST_F(CultsBoardTest, increasing_value_for_2_factions_by_2_on_one_track)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 1, 0, 1));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
 
@@ -210,8 +218,9 @@ TEST_F(CultsBoardTest, increasing_value_for_2_factions_by_2_on_one_track)
 
 TEST_F(CultsBoardTest, increasing_value_for_2_factions_by_2_then_1_on_two_tracks)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 0, 0, 0));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 0, 0, 0, 0));
 
@@ -266,8 +275,9 @@ TEST_F(CultsBoardTest, increasing_value_for_2_factions_by_2_then_1_on_two_tracks
 
 TEST_F(CultsBoardTest, increasing_value_for_3_factions_by_2_on_one_track)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
+
     ASSERT_TRUE(cultsBoard.addFaction(eFakirs, nullPowerUser, 0, 0, 0, 0));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 0, 0, 0, 0));
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, nullPowerUser, 0, 0, 0, 0));
@@ -290,7 +300,8 @@ TEST_F(CultsBoardTest, increasing_value_for_3_factions_by_2_on_one_track)
 
 TEST_F(CultsBoardTest, when_no_keys_should_not_move_to_level_10)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
+
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
 
     // Step to value 5
@@ -316,7 +327,8 @@ TEST_F(CultsBoardTest, when_no_keys_should_not_move_to_level_10)
 
 TEST_F(CultsBoardTest, when_stepping_over_level_10_should_result_lvl_10_if_there_is_a_key)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
+
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
 
     // Step to value 5
@@ -343,7 +355,8 @@ TEST_F(CultsBoardTest, when_stepping_over_level_10_should_result_lvl_10_if_there
 
 TEST_F(CultsBoardTest, one_faction_should_move_lvl10_only_on_one_cult_track_when_1_key_available)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
+
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
 
     // Step to value 5 on Air
@@ -390,8 +403,9 @@ TEST_F(CultsBoardTest, one_faction_should_move_lvl10_only_on_one_cult_track_when
 
 TEST_F(CultsBoardTest, two_faction_should_not_move_to_lvl10_on_the_same_cult)
 {
-    MockIPowerUser cmMockPowerUser;
-    CultsBoard cultsBoard;
+    MockPowerUser cmMockPowerUser;
+    CultsBoardImpl cultsBoard;
+
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, cmMockPowerUser, 2, 0, 0, 0));
 
@@ -439,8 +453,9 @@ TEST_F(CultsBoardTest, two_faction_should_not_move_to_lvl10_on_the_same_cult)
 
 TEST_F(CultsBoardTest, increasing_cult_value_over_10_should_be_max_10_or_9_when_no_key)
 {
-    MockIPowerUser cmMockPowerUser;
-    CultsBoard cultsBoard;
+    MockPowerUser cmMockPowerUser;
+    CultsBoardImpl cultsBoard;
+
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, cmMockPowerUser, 2, 0, 0, 0));
 
@@ -458,8 +473,9 @@ TEST_F(CultsBoardTest, increasing_cult_value_over_10_should_be_max_10_or_9_when_
 
 TEST_F(CultsBoardTest, increasing_cult_value_when_current_cult_value_already_10_should_be_no_effect)
 {
-    MockIPowerUser cmMockPowerUser;
-    CultsBoard cultsBoard;
+    MockPowerUser cmMockPowerUser;
+    CultsBoardImpl cultsBoard;
+
     ASSERT_TRUE(cultsBoard.addFaction(eWitches, mockPowerUser, 0, 0, 0, 2));
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, cmMockPowerUser, 2, 0, 0, 0));
 
@@ -475,8 +491,9 @@ TEST_F(CultsBoardTest, increasing_cult_value_when_current_cult_value_already_10_
 
 TEST_F(CultsBoardTest, initialized_to_9_10_and_greater_than_10_it_should_be_max_10)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     const unsigned int TWO_KEYS = 2;
+
     EXPECT_CALL(mockPowerUser, getNumberOfKeys()).Times(3).WillRepeatedly(Return(TWO_KEYS));
     EXPECT_CALL(mockPowerUser, addPower(::testing::_)).Times(0);
 
@@ -490,7 +507,7 @@ TEST_F(CultsBoardTest, initialized_to_9_10_and_greater_than_10_it_should_be_max_
 
 TEST_F(CultsBoardTest, sending_priest_to_a_cult_track_should_increase_by_3_at_first_time)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
 
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
@@ -501,7 +518,7 @@ TEST_F(CultsBoardTest, sending_priest_to_a_cult_track_should_increase_by_3_at_fi
 
 TEST_F(CultsBoardTest, sending_priest_should_increase_by_2_when_its_the_second_priest)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
 
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
@@ -515,7 +532,7 @@ TEST_F(CultsBoardTest, sending_priest_should_increase_by_2_when_its_the_second_p
 
 TEST_F(CultsBoardTest, sending_priest_should_increasing_by_1_after_the_fourth_sent_priest)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
 
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
@@ -540,7 +557,7 @@ TEST_F(CultsBoardTest, sending_priest_should_increasing_by_1_after_the_fourth_se
 
 TEST_F(CultsBoardTest, sending_priest_should_not_affect_on_other_factions)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
     NullPowerUser nullPowerUser;
 
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, nullPowerUser, 2, 0, 0, 0));
@@ -559,7 +576,7 @@ TEST_F(CultsBoardTest, sending_priest_should_not_affect_on_other_factions)
 
 TEST_F(CultsBoardTest, stepping_over_power_lines_should_be_indicated_with_call_back)
 {
-    CultsBoard cultsBoard;
+    CultsBoardImpl cultsBoard;
 
     ASSERT_TRUE(cultsBoard.addFaction(eChaosMagicians, mockPowerUser, 2, 0, 0, 0));
 

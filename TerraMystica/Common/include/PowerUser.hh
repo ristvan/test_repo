@@ -1,6 +1,6 @@
 #pragma once
 
-class IPowerUser
+class PowerUser
 {
 public:
     virtual void addPower(const unsigned int power) = 0;

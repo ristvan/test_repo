@@ -1,9 +1,9 @@
 #pragma once
 
-#include "IPowerUser.hh"
+#include "PowerUser.hh"
 #include "gmock/gmock.h"
 
-class MockIPowerUser : public IPowerUser {
+class MockPowerUser : public PowerUser {
  public:
   MOCK_METHOD1(addPower,
       void(const unsigned int power));

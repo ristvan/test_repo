@@ -4,7 +4,7 @@
 #include <map>
 
 // forward declarations
-class IPowerUser;
+class PowerUser;
 class KeyCounter;
 
 class CultsLane
@@ -12,7 +12,7 @@ class CultsLane
 public:
     CultsLane(KeyCounter &keyCounter);
     ~CultsLane();
-    bool addFaction(const Factions faction, IPowerUser &powerUser);
+    bool addFaction(const Factions faction, PowerUser &powerUser);
     void initFaction(const Factions faction, const unsigned int cultValue);
     unsigned int increaseCultValue(const Factions faction, const unsigned int value);
     unsigned int getCultValue(const Factions faction) const;
